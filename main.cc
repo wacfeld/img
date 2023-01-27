@@ -11,6 +11,8 @@
 #define SCREEN_WIDTH 700
 #define SCREEN_HEIGHT 500
 
+#define SCALE 100
+
 SDL_Window *gwin;
 SDL_Surface *gsurf;
 
@@ -106,9 +108,11 @@ int main(int argc, char **argv)
   src.x = 0;
   src.y = 0;
 
+  int scale = SCALE;
+
   int c;
 
-  SDL_BlitSurface(imgs[0], &src, gsurf, NULL);
+  SDL_BlitScaled(imgs[0], &src, gsurf, NULL);
   SDL_UpdateWindowSurface(gwin);
     
   while(true)
@@ -117,20 +121,29 @@ int main(int argc, char **argv)
     move(0,0);
     clrtoeol();
     if(c == 'k')
-      src.y -= 10;
+      src.y -= 50*scale/SCALE;
     if(c == 'j')
-      src.y += 10;
+      src.y += 50*scale/SCALE;
     if(c == 'l')
-      src.x += 10;
+      src.x += 50*scale/SCALE;
     if(c == 'h')
-      src.x -= 10;
+      src.x -= 50*scale/SCALE;
+    if(c == '-')
+      scale -= 5;
+    if(c == '+')
+      scale += 5;
+    if(c == '=')
+      scale = SCALE;
     if(c == 'q')
       break;
     
-    printw("%d %d", src.x, src.y);
+    printw("%d %d %d", src.x, src.y, scale);
+
+    src.w = imgs[0]->w * scale / SCALE;
+    src.h = imgs[0]->h * scale / SCALE;
     
     SDL_FillRect( gsurf, NULL, SDL_MapRGB( gsurf->format, 0xFF, 0xFF, 0xFF ) );
-    SDL_BlitSurface(imgs[0], &src, gsurf, NULL);
+    SDL_BlitScaled(imgs[0], &src, gsurf, NULL);
     SDL_UpdateWindowSurface(gwin);
 
     
