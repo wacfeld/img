@@ -103,16 +103,23 @@ int main(int argc, char **argv)
 	refresh();
 
   SDL_Rect src;
-  src.w = imgs[0]->w;
-  src.h = imgs[0]->h;
+  src.w = SCREEN_WIDTH;
+  src.h = SCREEN_HEIGHT;
   src.x = 0;
   src.y = 0;
 
+  SDL_Rect dest;
+  dest.w = SCREEN_WIDTH;
+  dest.h = SCREEN_WIDTH;
+  dest.x = 0;
+  dest.y = 0;
+
   int scale = SCALE;
 
+  int ii = 0;
   int c;
 
-  SDL_BlitScaled(imgs[0], &src, gsurf, NULL);
+  SDL_BlitScaled(imgs[0], &src, gsurf, &dest);
   SDL_UpdateWindowSurface(gwin);
     
   while(true)
@@ -121,29 +128,38 @@ int main(int argc, char **argv)
     move(0,0);
     clrtoeol();
     if(c == 'k')
-      src.y -= 50*scale/SCALE;
+      src.y -= 30*scale/SCALE;
     if(c == 'j')
-      src.y += 50*scale/SCALE;
+      src.y += 30*scale/SCALE;
     if(c == 'l')
-      src.x += 50*scale/SCALE;
+      src.x += 30*scale/SCALE;
     if(c == 'h')
-      src.x -= 50*scale/SCALE;
-    if(c == '-')
-      scale -= 5;
+      src.x -= 30*scale/SCALE;
     if(c == '+')
-      scale += 5;
+      scale -= 20;
+    if(c == '-')
+      scale += 20;
     if(c == '=')
       scale = SCALE;
+    if(c == 'n')
+    {
+      ii++;
+      ii %= imgs.size();
+    }
     if(c == 'q')
       break;
     
     printw("%d %d %d", src.x, src.y, scale);
 
-    src.w = imgs[0]->w * scale / SCALE;
-    src.h = imgs[0]->h * scale / SCALE;
+    src.w = SCREEN_HEIGHT * scale / SCALE;
+    src.h = SCREEN_HEIGHT * scale / SCALE;
     
+  dest.w = SCREEN_WIDTH;
+  dest.h = SCREEN_WIDTH;
+  dest.x = 0;
+  dest.y = 0;
     SDL_FillRect( gsurf, NULL, SDL_MapRGB( gsurf->format, 0xFF, 0xFF, 0xFF ) );
-    SDL_BlitScaled(imgs[0], &src, gsurf, NULL);
+    SDL_BlitScaled(imgs[0], &src, gsurf, &dest);
     SDL_UpdateWindowSurface(gwin);
 
     
