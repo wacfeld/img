@@ -1,6 +1,9 @@
 // -*- mode: c++ -*-
 
 #include <SDL2/SDL.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ncurses.h>
 
 #define error(fmt, ...) do { fprintf(stderr, "%s: %d: %s: " fmt, __FILE__, __LINE__, __func__ __VA_OPT__(,) __VA_ARGS__); getchar();/*close(); exit(1);*/ } while(0)
 
@@ -61,15 +64,22 @@ void init(const char *title, int w, int h)
 
 int main(int argc, char **args)
 {
-  // initialize window
-  init("tetrui", SCREEN_WIDTH, SCREEN_HEIGHT);
-  SDL_FillRect( gsurf, NULL, SDL_MapRGB( gsurf->format, 0xFF, 0xFF, 0xFF ) );
-  SDL_UpdateWindowSurface( gwin );
 
-  getchar();
+  initscr();
+	printw("Hello World !!!");
+	refresh();
+	int c = getch();
+	// addch(c);
+	refresh();
+	getch();
+	endwin();
 
-  close();
+	return 0;
+
+  // // initialize window
+  // init("tetrui", SCREEN_WIDTH, SCREEN_HEIGHT);
+  // SDL_FillRect( gsurf, NULL, SDL_MapRGB( gsurf->format, 0xFF, 0xFF, 0xFF ) );
+  // SDL_UpdateWindowSurface( gwin );
+
   return 0;
 }
-
-// guideline https://tetris.wiki/Tetris_Guideline
